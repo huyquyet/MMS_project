@@ -9,5 +9,5 @@ from app.team.models import Team
 
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
-    avata = models.ImageField(upload_to=settings.AVATA_DIR, max_length=255, default='', blank=False)
-    team = models.ForeignKey(Team, related_name='team')
+    avata = models.ImageField(upload_to=settings.AVATA_DIR, max_length=255, default='avata/default.jpg', blank=False)
+    team = models.ForeignKey(Team, related_name='team', null=True)
