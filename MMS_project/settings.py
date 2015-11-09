@@ -47,7 +47,6 @@ INSTALLED_APPS = (
     'app.admin',
 )
 
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -121,3 +120,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = ''
+
+AVATA_DIR = 'avata'
