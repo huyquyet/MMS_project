@@ -1,11 +1,11 @@
 {% extends 'admin/layout/base_admin.html' %}
 {% block content_header %}
-    <div class="col-lg-5 col-lg-offset-3" style="padding-bottom: 10px;">
-        <span class="text-blue pull-left">Project Index</span>
+    <div class="col-lg-6 col-lg-offset-3" style="padding-bottom: 10px;">
+        <span class="text-blue pull-left">Management User Index</span>
 
         <form action="" method="get" class="pull-right">
             {% csrf_token %}
-            <input type="text" value="" name="search" class="form-control" placeholder="Enter something" style="width: 400px;">
+            <input type="text" value="" name="search" class="form-control" placeholder=" Search something" style="width: 400px;">
         </form>
     </div>
 {% endblock %}
