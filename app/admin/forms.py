@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import TextInput, Textarea, DateInput
+from app.position.models import Position
 
 from app.project.models import Project
 from app.skill.models import Skill
@@ -41,4 +42,15 @@ class SkillCreateFormView(forms.ModelForm):
             'name': TextInput(attrs={'size': 70, 'required': True}),
             'slug': TextInput(attrs={'size': 70, 'required': True}),
             'about_skill': Textarea(attrs={'rows': 7, 'cols': 70}),
+        }
+
+
+class PositionCreateFormView(forms.ModelForm):
+    class Meta:
+        model = Position
+        fields = ['name', 'slug', 'description']
+        widgets = {
+            'name': TextInput(attrs={'size': 70, 'required': True}),
+            'slug': TextInput(attrs={'size': 70, 'required': True}),
+            'description': Textarea(attrs={'rows': 7, 'cols': 70}),
         }

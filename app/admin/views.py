@@ -10,7 +10,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, DetailView, ListView, CreateView
-from app.admin.forms import TeamCreateFormView, ProjectCreateFormView, SkillCreateFormView
+from app.admin.forms import TeamCreateFormView, ProjectCreateFormView, SkillCreateFormView, PositionCreateFormView
+from app.position.models import Position
 from app.project.models import Project
 from app.skill.function import return_total_skill_of_team, count_user_of_skill, count_team_of_skill
 from app.skill.models import Skill
@@ -196,3 +197,43 @@ class AdminSkillCreate(CreateView):
 
 
 AdminSkillCreateView = AdminSkillCreate.as_view()
+
+""" ----------------------------------------------------------------------
+    View Position Admin
+-----------------------------------------------------------------------"""
+
+
+class AdminPositionIndex(ListView):
+    model = Position
+    template_name = 'position/admin/admin_position_index.html'
+    paginate_by = 15
+    context_object_name = 'list_position'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Position Index'
+        return super(AdminPositionIndex, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        return ctx
+
+
+AdminPositionIndexView = AdminPositionIndex.as_view()
+
+
+class AdminPositionCreate(CreateView):
+    model = Position
+    template_name = 'position/admin/admin_position_create.html'
+    form_class = PositionCreateFormView
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Create new Position'
+        return super(AdminPositionCreate, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('admin:admin_position_index')
+
+
+AdminPositionCreateView = AdminPositionCreate.as_view()
