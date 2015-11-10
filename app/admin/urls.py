@@ -16,12 +16,16 @@ urlpatterns = [
     url(r'^/user$', views.AdminUserIndexView, name='admin_user_index'),
     url(r'^/user/create$', views.AdminUserCreateView, name='admin_user_create'),
     url(r'^/user/detail/(?P<username>[\w-]+)$', views.AdminUserDetailView, name='admin_user_detail'),
+    url(r'^/user/update/(?P<username>[\w-]+)$', views.AdminUserUpdateView, name='admin_user_update'),
+    url(r'^/user/update/(?P<username>[\w-]+)/skill$', views.AdminUserEditSkillView, name='admin_user_edit_skill'),
+    url(r'^/user/add/skill$', views.add_skill_user, name='admin_user_add_skill'),
 
     ##########################################################
     ##########################################################
     # Team
     url(r'^/team$', views.AdminTeamIndexView, name='admin_team_index'),
     url(r'^/team/create$', views.AdminTeamCreateView, name='admin_team_create'),
+    url(r'^/team/detail/(?P<slug>[\w-]+)$', views.AdminTeamDetailView, name='admin_team_detail'),
 
     ##########################################################
     ##########################################################

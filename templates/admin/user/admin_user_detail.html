@@ -10,10 +10,10 @@
         <div class="col-lg-10 col-lg-offset-1 bg-gray-light">
             <div class="row">
                 <div class="col-lg-2">
-                    <img src="{{ detail_user.profile.avata.url }}" class="thumbnail" alt="{{ object.title }}" width="100%"/>
+                    <img src="{{ detail_user.profile.avata.url }}" class="thumbnail" alt="{{ detail_user.first_name }} {{ detail_user.last_name }}" width="100%"/>
                 </div>
                 <div class="col-lg-4 ">
-                    <div><span class="text-success text-bold "><h3>{{ object.title }}</h3></span></div>
+                    {#                    <div><span class="text-success text-bold "><h3>{{ object.title }}</h3></span></div>#}
                     <div>
                         <h4> Username : <a href="#"> {{ detail_user.username }}</a></h4>
                     </div>
@@ -23,6 +23,9 @@
                         Team : <span class=" text-danger" style="font-size: 16px">{{ detail_user.team.name }}</span><br>
                         Position : <span class=" text-danger" style="font-size: 16px">{{ detail_user.position.name }}</span><br>
                         Total Skill : <span class=" text-danger" style="font-size: 16px">{{ detail_user.skill }}</span><br>
+                    </div>
+                    <div>
+                        <span><a href="{% url 'admin:admin_user_update'  detail_user.username %}" role="button" class="btn btn-success">Edit</a></span>
                     </div>
 
                 </div>
@@ -36,16 +39,18 @@
 
             </div>
         </div>
-        <div class="col-lg-10 col-lg-offset-1 bg-light-blue-active pad" style=" margin-top: 5px;">
+        <div class="col-lg-10 col-lg-offset-1  pad" style=" margin-top: 5px;">
             <div class="row">
                 <div class="col-lg-4">
                     <legend>
-                        <span >Team</span>
+                        <span>Team</span>
                     </legend>
                 </div>
                 <div class="col-lg-4">
-                    <legend >
-                        <span style="color: white">Skill</span>
+                    <legend>
+                        <span>Skill</span>
+                        <span style="color: white; margin-right: 25px;" class="pull-right"><a href="{% url 'admin:admin_user_edit_skill' detail_user.username %}" role="button"
+                                                                                              class="btn btn-info btn-xs">Edit</a> </span>
                     </legend>
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -59,13 +64,13 @@
                         <tbody>
                         {% for obj in list_skill_user %}
                             <tr>
-                                <td class="col-lg-2"><span class="text-info">{{ forloop.counter }}</span>
+                                <td class="col-lg-2"><span>{{ forloop.counter }}</span>
                                 </td>
-                                <td class="col-lg-5"><span class=" text-info">{{ obj.name }}</span>
+                                <td class="col-lg-5"><span>{{ obj.skill.name }}</span>
                                 </td>
-                                <td class="col-lg-3"><span class=" text-info">{{ obj.level }}</span>
+                                <td class="col-lg-3"><span>{{ obj.level }}</span>
                                 </td>
-                                <td class="col-lg-2"><span class=" text-info">{{ obj.year }}</span>
+                                <td class="col-lg-2"><span>{{ obj.year }}</span>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -73,7 +78,7 @@
                     </table>
                 </div>
                 <div class="col-lg-4">
-                    <legend >
+                    <legend>
                         Project
                     </legend>
                 </div>

@@ -7,14 +7,17 @@ from django.contrib.auth.decorators import user_passes_test
 # Create your views here.
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, FormView, DetailView, ListView, CreateView
-from app.admin.forms import TeamCreateFormView, ProjectCreateFormView, SkillCreateFormView, PositionCreateFormView, UserCreateFormView
+from django.views.generic import TemplateView, FormView, DetailView, ListView, CreateView, UpdateView
+from app.admin.forms import TeamCreateFormView, ProjectCreateFormView, SkillCreateFormView, PositionCreateFormView, UserCreateFormView, UserUpdateFormView
 from app.position.models import Position
+from app.project.function import return_total_project_of_team, return_list_project_of_team
 from app.project.models import Project
-from app.skill.function import return_total_skill_of_team, count_user_of_skill, count_team_of_skill, count_skill_of_user, return_list_skill_of_user
-from app.skill.models import Skill
+from app.skill.function import return_total_skill_of_team, count_user_of_skill, count_team_of_skill, count_skill_of_user, return_list_skill_of_user, return_list_skill_not_of_user, return_list_skill_of_team
+from app.skill.models import Skill, UserSkill
+from app.team.function import return_total_user_of_team, return_list_member_of_team
 from app.team.models import Team
 from app.user.function import return_team_of_user, return_position_of_user
 from app.user.models import Profile
@@ -164,6 +167,85 @@ class AdminUserDetail(DetailView):
 
 AdminUserDetailView = AdminUserDetail.as_view()
 
+
+class AdminUserUpdate(UpdateView):
+    model = User
+    form_class = UserUpdateFormView
+    template_name = 'admin/user/admin_user_update.html'
+    context_object_name = 'update_user'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'User detail'
+        return super(AdminUserUpdate, self).dispatch(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        return User.objects.get(username=self.kwargs['username'])
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['update_user'].team = return_team_of_user(ctx['update_user'])
+        ctx['update_user'].position = return_position_of_user(ctx['update_user'])
+        # ctx['detail_user'].skill = count_skill_of_user(ctx['detail_user'])
+        # ctx['list_skill_user'] = return_list_skill_of_user(ctx['detail_user'])
+        ctx['list_team'] = Team.objects.all()
+        ctx['list_position'] = Position.objects.all()
+        return ctx
+
+    def form_valid(self, form):
+        user = form.save()
+        profile = user.profile
+        profile.team = Team.objects.get(id=self.request.POST.get('team_id'))
+        profile.position = Position.objects.get(id=self.request.POST.get('position_id'))
+        profile.save()
+        return super(AdminUserUpdate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('admin:admin_user_index')
+
+
+AdminUserUpdateView = AdminUserUpdate.as_view()
+
+
+class AdminUserEditSkill(DetailView):
+    model = User
+    template_name = 'admin/user/admin_user_edit_skill.html'
+    context_object_name = 'detail_user'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'User detail'
+        return super(AdminUserEditSkill, self).dispatch(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        return User.objects.get(username=self.kwargs['username'])
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['list_skill_user'] = return_list_skill_of_user(self.object)
+        ctx['list_skill'] = return_list_skill_not_of_user(self.object)
+        return ctx
+
+
+AdminUserEditSkillView = AdminUserEditSkill.as_view()
+
+
+def add_skill_user(request):
+    skill_id = request.POST.get('skill_id', None)
+    year = request.POST.get('year', None)
+    level = request.POST.get('level', None)
+    user = request.POST.get('user', None)
+    if user is not None:
+        if skill_id is None or year is None or level is None:
+            return HttpResponseRedirect(reverse('admin:admin_user_edit_skill', kwargs={'username': user}))
+        else:
+            skill, create = UserSkill.objects.get_or_create(user=User.objects.get(username=user), skill=Skill.objects.get(id=skill_id), level=level, year=year)
+            skill.save()
+            return HttpResponseRedirect(reverse('admin:admin_user_edit_skill', kwargs={'username': user}))
+    else:
+        return HttpResponseRedirect(reverse('admin:admin_user_index'))
+
+
 """ ----------------------------------------------------------------------
     View Team Admin
 -----------------------------------------------------------------------"""
@@ -179,6 +261,13 @@ class AdminTeamIndex(ListView):
     def dispatch(self, request, *args, **kwargs):
         self.request.session['title'] = 'Team Index'
         return super(AdminTeamIndex, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        search = self.request.GET.get('search', None)
+        if search is None:
+            return Team.objects.all()
+        else:
+            return Team.objects.filter(Q(name__icontains=search) | Q(about_team__icontains=search))
 
     def get_context_data(self, **kwargs):
         ctx = super(AdminTeamIndex, self).get_context_data(**kwargs)
@@ -206,6 +295,34 @@ class AdminTeamCreate(CreateView):
 
 
 AdminTeamCreateView = AdminTeamCreate.as_view()
+
+
+class AdminTeamDetail(DetailView):
+    model = Team
+    template_name = 'team/admin/admin_team_detail.html'
+    context_object_name = 'detail_team'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Team Detail'
+        return super(AdminTeamDetail, self).dispatch(request, *args, **kwargs)
+
+    # def get_queryset(self):
+    #     return self.object.ge
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['leader'] = User.objects.get(id=self.object.leader.id)
+        ctx['total_skill'] = return_total_skill_of_team(self.object)
+        ctx['total_member'] = return_total_user_of_team(self.object)
+        ctx['total_project'] = return_total_project_of_team(self.object)
+        ctx['list_member_of_team'] = return_list_member_of_team(self.object)
+        ctx['list_skill_of_team'] = return_list_skill_of_team(self.object)
+        ctx['list_project_of_team'] = return_list_project_of_team(self.object)
+        return ctx
+
+
+AdminTeamDetailView = AdminTeamDetail.as_view()
 
 """ ----------------------------------------------------------------------
     View Project Admin

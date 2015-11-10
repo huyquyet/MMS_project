@@ -11,5 +11,3 @@ class Position(models.Model):
     def __unicode__(self):
         return self.name
 
-    def return_all_team(self):
-        return self.team_position.all()

@@ -1,0 +1,59 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block content_header %}
+    <div class="col-lg-10 col-lg-offset-2" style="padding-bottom: 10px;">
+        <span class="text-blue pull-left">Update profile user</span>
+        <span class="pull-right"><a href="javascript:history.back()" role="button" class="btn btn-danger">Back</a></span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="row" style="padding: 0 5px 0 5px">
+            <div class="col-lg-10 col-lg-offset-1 bg-gray-light">
+                <div class="row">
+
+                    <form action="" method="post" role="form" class="form-inline">
+                        {% csrf_token %}
+                        <div class="col-lg-4 col-lg-offset-1">
+                            <div style="margin: 5px 0 5px 18px; ">
+                                <label >User name :</label>  <span  style="font-size: 18px;">{{ update_user.username }}</span>
+                            </div>
+                            {% for field in form %}
+                                <div class="form-group {% if field.errors %} has-error {% endif %} col-lg-12 has-feedback">
+                                    <span class="text-success">{{ field.name }}</span>
+                                    <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="form-control" placeholder="{{ field.name }}" value="{{ field.value }}">
+                                    <span class="help-block">{{ field.errors }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="margin">
+                                <span class="text-success">Team :</span>
+                                <select class="form-control" name="team_id" style="width: 200px;">
+                                    {% for obj in list_team %}
+                                        <option value="{{ obj.id }}" {% if obj.id == update_user.team.id %}selected{% endif %}>{{ obj.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="margin">
+                                <span class="text-success">Position :</span>
+                                <select class="form-control" name="position_id" style="width: 200px;">
+                                    {% for obj in list_position %}
+                                        <option value="{{ obj.id }}" {% if obj.id == update_user.position.id %}selected{% endif %}>{{ obj.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-11 col-lg-offset-1">
+                            <button type="submit" class="btn btn-primary ">Update</button>
+                            <button type="reset" class="btn btn-default">Reset</button>
+                            <a role="button" href="#" class="btn btn-default">Change PassWord</a>
+                            <a href="#" role="button" class="btn btn-default">Cancel</a>
+                        </div>
+                    </form>
+                    <br>
+                    {#                    </div>#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block content_header %}
+    <div class="col-lg-5 col-lg-offset-3" style="padding-bottom: 10px;">
+        <span class="text-blue pull-left">Team Detail</span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row" style="padding: 0 5px 0 5px">
+        <div class="col-lg-10 col-lg-offset-1 bg-gray-light">
+            <div class="row">
+                <div class="col-lg-4 ">
+                    <div>
+                        <h4> Name : <a href="#"> {{ detail_team.name }}</a></h4>
+                    </div>
+                    <div>
+                        Leader : <span class=" text-danger" style="font-size: 16px">{{ leader.first_name }} {{ leader.last_name }}</span><br>
+                        Member : <span class=" text-danger" style="font-size: 16px">{{ total_member }}</span><br>
+                        Total Project : <span class=" text-danger" style="font-size: 16px">{{ total_project }}</span><br>
+                        Total Skill : <span class=" text-danger" style="font-size: 16px">{{ total_skill }}</span><br>
+                    </div>
+                    <div>
+                        <span><a href="#" role="button" class="btn btn-success">Edit</a></span>
+                    </div>
+
+                </div>
+                <div class="col-lg-8">
+                    <legend>
+                        About team
+                    </legend>
+                    {{ detail_team.about_team }}
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-10 col-lg-offset-1  pad" style=" margin-top: 5px; background-color: #BABCAD">
+            <div class="row">
+                <div class="col-lg-3">
+                    <legend>
+                        <span>Member</span>
+                    </legend>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-lg-1 ">Stt</th>
+                            <th class="col-lg-6">Name</th>
+                            <th class="col-lg-3">Position</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="col-lg-1"><span>0</span>
+                            </td>
+                            <td class="col-lg-6"><span>{{ leader.first_name }} {{ leader.last_name }}</span>
+                            </td>
+                            <td class="col-lg-3"><span>Leader</span>
+                            </td>
+                        </tr>
+                        {% for obj in list_member_of_team %}
+                            <tr>
+                                <td class="col-lg-1"><span>{{ forloop.counter }}</span>
+                                </td>
+                                <td class="col-lg-6"><span>{{ obj.name }}</span>
+                                </td>
+                                <td class="col-lg-3"><span>{{ obj.position_name }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-4">
+                    <legend>
+                        <span>Skill</span>
+                        <span style="color: white; margin-right: 25px;" class="pull-right"><a href="#" role="button" class="btn btn-info btn-xs">Edit</a> </span>
+                    </legend>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-lg-1 ">Stt</th>
+                            <th class="col-lg-5">Name</th>
+                            <th class="col-lg-3">Level</th>
+                            <th class="col-lg-2">Year</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for obj in list_skill_of_team %}
+                            <tr>
+                                <td class="col-lg-2"><span>{{ forloop.counter }}</span>
+                                </td>
+                                <td class="col-lg-5"><span>{{ obj.skill.name }}</span>
+                                </td>
+                                <td class="col-lg-3"><span>{{ obj.level }}</span>
+                                </td>
+                                <td class="col-lg-2"><span>{{ obj.year }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-5">
+                    <legend>
+                        Project
+                    </legend>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-lg-1 ">Stt</th>
+                            <th class="col-lg-7">Name</th>
+                            <th class="col-lg-2">Start Date</th>
+                            <th class="col-lg-2">End Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for obj in list_project_of_team %}
+                            <tr>
+                                <td class="col-lg-2"><span>{{ forloop.counter }}</span>
+                                </td>
+                                <td class="col-lg-7"><span>{{ obj.skill.name }}</span>
+                                </td>
+                                <td class="col-lg-2"><span>{{ obj.level }}</span>
+                                </td>
+                                <td class="col-lg-2"><span>{{ obj.year }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

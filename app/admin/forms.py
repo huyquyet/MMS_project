@@ -1,12 +1,12 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import TextInput, Textarea, DateInput, PasswordInput
+from django.utils.translation import ugettext_lazy as _
 
 from app.position.models import Position
 from app.project.models import Project
 from app.skill.models import Skill
 from app.team.models import Team
-from django.utils.translation import ugettext_lazy as _
 
 __author__ = 'FRAMGIA\nguyen.huy.quyet'
 
@@ -22,6 +22,34 @@ class UserCreateFormView(forms.ModelForm):
             'password': PasswordInput(attrs={'size': 20, 'required': True}),
             'password_com': PasswordInput(attrs={'size': 70, 'required': True}),
         }
+
+    def clean_password_con(self):
+        password = self.cleaned_data.get('password')
+        password_com = self.cleaned_data.get('password_com')
+        if password != password_com:
+            raise forms.ValidationError('password ko trung khop')
+        return password
+
+
+class UserUpdateFormView(forms.ModelForm):
+    email_confirm = forms.CharField(label=_("Email confirmation"), widget=forms.EmailInput, help_text=_("Enter the same password as above, for verification."))
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+        widgets = {
+            'first_name': TextInput(attrs={'size': 40, 'required': True}),
+            'last_name': TextInput(attrs={'size': 50, 'required': True}),
+            'email': TextInput(attrs={'size': 70, 'required': True}),
+            # 'email_com': TextInput(attrs={'size': 70, 'required': True}),
+        }
+
+    def clean_email_confirm(self):
+        email1 = self.cleaned_data.get('email')
+        email_con = self.cleaned_data.get('email_confirm')
+        if email1 != email_con:
+            raise forms.ValidationError('Email ko trung khop')
+        return email1
 
 
 class TeamCreateFormView(forms.ModelForm):
