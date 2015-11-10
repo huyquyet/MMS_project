@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 
+from app.user.models import Profile
+
 __author__ = 'FRAMGIA\nguyen.huy.quyet'
 
 
@@ -9,3 +11,11 @@ def return_user(user):
         return User.objects.get(user=user)
     else:
         return User.objects.get(id=1)
+
+
+def return_team_of_user(user):
+    return Profile.objects.get(user=user).team
+
+
+def return_position_of_user(user):
+    return Profile.objects.get(user=user).position

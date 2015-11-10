@@ -8,7 +8,14 @@ urlpatterns = [
     url(r'^$', views.AdminIndexView, name='admin_index'),
     url(r'^/login$', views.AdminLoginView, name='admin_login'),
     url(r'^/logout$', views.logout_admin, name='admin_logout'),
-    url(r'^/profile/(?P<username>[\w-])$', views.logout_admin, name='admin_detail_profile'),
+    url(r'^/profile/(?P<username>[\w-]+)$', views.logout_admin, name='admin_detail_profile'),
+
+    ##########################################################
+    ##########################################################
+    # User
+    url(r'^/user$', views.AdminUserIndexView, name='admin_user_index'),
+    url(r'^/user/create$', views.AdminUserCreateView, name='admin_user_create'),
+    url(r'^/user/detail/(?P<username>[\w-]+)$', views.AdminUserDetailView, name='admin_user_detail'),
 
     ##########################################################
     ##########################################################

@@ -1,0 +1,83 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block content_header %}
+    <div class="col-lg-10 col-lg-offset-1" style="padding-bottom: 10px;">
+        <span class="text-blue pull-left">User profile detail</span>
+        <span class="pull-right"><a href="javascript:history.back()" role="button" class="btn btn-danger">Back</a></span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row" style="padding: 0 5px 0 5px">
+        <div class="col-lg-10 col-lg-offset-1 bg-gray-light">
+            <div class="row">
+                <div class="col-lg-2">
+                    <img src="{{ detail_user.profile.avata.url }}" class="thumbnail" alt="{{ object.title }}" width="100%"/>
+                </div>
+                <div class="col-lg-4 ">
+                    <div><span class="text-success text-bold "><h3>{{ object.title }}</h3></span></div>
+                    <div>
+                        <h4> Username : <a href="#"> {{ detail_user.username }}</a></h4>
+                    </div>
+                    <div>
+                        Full name : <span class=" text-danger" style="font-size: 16px">{{ detail_user.first_name }} {{ detail_user.last_name }}</span><br>
+                        Email : <span class=" text-danger" style="font-size: 16px">{{ detail_user.email }}</span><br>
+                        Team : <span class=" text-danger" style="font-size: 16px">{{ detail_user.team.name }}</span><br>
+                        Position : <span class=" text-danger" style="font-size: 16px">{{ detail_user.position.name }}</span><br>
+                        Total Skill : <span class=" text-danger" style="font-size: 16px">{{ detail_user.skill }}</span><br>
+                    </div>
+
+                </div>
+                <div class="col-lg-6 ">
+                    <legend>
+                        Description
+                    </legend>
+                    {{ detail_user.description }}
+                    ;sldjflksjflksdjflk
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-10 col-lg-offset-1 bg-light-blue-active pad" style=" margin-top: 5px;">
+            <div class="row">
+                <div class="col-lg-4">
+                    <legend>
+                        <span >Team</span>
+                    </legend>
+                </div>
+                <div class="col-lg-4">
+                    <legend >
+                        <span style="color: white">Skill</span>
+                    </legend>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-lg-2 ">Stt</th>
+                            <th class="col-lg-5">Name</th>
+                            <th class="col-lg-3">Level</th>
+                            <th class="col-lg-2">Year</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for obj in list_skill_user %}
+                            <tr>
+                                <td class="col-lg-2"><span class="text-info">{{ forloop.counter }}</span>
+                                </td>
+                                <td class="col-lg-5"><span class=" text-info">{{ obj.name }}</span>
+                                </td>
+                                <td class="col-lg-3"><span class=" text-info">{{ obj.level }}</span>
+                                </td>
+                                <td class="col-lg-2"><span class=" text-info">{{ obj.year }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-4">
+                    <legend >
+                        Project
+                    </legend>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

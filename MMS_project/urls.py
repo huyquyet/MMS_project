@@ -14,9 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
+from MMS_project import settings
 
 urlpatterns = [
     # url(r'^admin/', include(admin.site.urls)),
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': settings.DEBUG}),
     url(r'^admin', include('app.admin.urls', namespace='admin')),
     url(r'^', include('app.user.urls', namespace='user')),
     url(r'^position', include('app.position.urls', namespace='position')),

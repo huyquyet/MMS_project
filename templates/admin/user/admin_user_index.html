@@ -1,0 +1,75 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block content_header %}
+    <div class="col-lg-5 col-lg-offset-3" style="padding-bottom: 10px;">
+        <span class="text-blue pull-left">Project Index</span>
+
+        <form action="" method="get" class="pull-right">
+            {% csrf_token %}
+            <input type="text" value="" name="search" class="form-control" placeholder="Enter something" style="width: 400px;">
+        </form>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row" style="padding: 0 5px 0 5px">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="col-lg-1">ID</th>
+                <th class="col-lg-2">User</th>
+                <th class="col-lg-2">Full name</th>
+                <th class="col-lg-2">Email</th>
+                <th class="col-lg-2">Team</th>
+                <th class="col-lg-1">Position</th>
+                <th class="col-lg-1">Skill</th>
+                <th class="col-lg-1"><a href="{% url 'admin:admin_user_create' %}" role="button" class="btn btn-danger btn-sm">Create New</a></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in list_user %}
+                <tr>
+                    <td class="col-lg-1"><span class=" text-info">{{ obj.id }}</span>
+                    </td>
+                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_user_detail' obj.username %}">{{ obj.username }}</a>
+                    </td>
+                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_user_detail' obj.username %}">{{ obj.first_name }} {{ obj.last_name }}</a>
+                    </td>
+                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_user_detail' obj.username %}">{{ obj.email }}</a>
+                    </td>
+                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_user_detail' obj.username %}">{{ obj.team.name }}</a>
+                    </td>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_user_detail' obj.username %}">{{ obj.position.name }}</a>
+                    </td>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_user_detail' obj.username %}">{{ obj.skill }}</a>
+                    </td>
+
+                    <td class="col-lg-1">
+                        <a href="{% url 'admin:admin_project_create' %}" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
+
+                        <form action="{% url 'admin:admin_project_create' %}" method="post" style="float: right; margin: 0 20px 0 0">
+                            {% csrf_token %}
+                            <input type="hidden" name="book_id" value="{{ obj.id }}">
+                            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover user ?')"> Delete</button>
+                        </form>
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+                <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                    <span class="current">
+                    Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+                </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+        </div>
+    </div>
+{% endblock %}

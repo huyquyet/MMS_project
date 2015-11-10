@@ -170,7 +170,7 @@
                             <ul class="dropdown-menu">
                                 <!-- The user image in the menu -->
                                 <li class="user-header">
-                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <img src="{{ user.profile.avata.url|default_if_none:'None' }}" class="img-circle" alt="{{ user.profile.id }}">
 
                                     <p>
                                         {{ user.first_name }} {{ user.last_name }} - Web Developer
@@ -208,7 +208,7 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="{{ user.profile.avata.url }}" class="img-circle" alt="User Image ">
                     </div>
                     <div class="pull-left info">
                         <p>{{ user.first_name }} {{ user.last_name }}</p>
@@ -250,7 +250,7 @@
                             <i
                                     class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
-                            <li><a href="#">User</a></li>
+                            <li><a href="{% url 'admin:admin_user_index' %}">User</a></li>
                             <li><a href="#">Manager</a></li>
                         </ul>
                     </li>

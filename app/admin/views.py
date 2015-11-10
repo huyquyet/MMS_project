@@ -10,12 +10,14 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, DetailView, ListView, CreateView
-from app.admin.forms import TeamCreateFormView, ProjectCreateFormView, SkillCreateFormView, PositionCreateFormView
+from app.admin.forms import TeamCreateFormView, ProjectCreateFormView, SkillCreateFormView, PositionCreateFormView, UserCreateFormView
 from app.position.models import Position
 from app.project.models import Project
-from app.skill.function import return_total_skill_of_team, count_user_of_skill, count_team_of_skill
+from app.skill.function import return_total_skill_of_team, count_user_of_skill, count_team_of_skill, count_skill_of_user, return_list_skill_of_user
 from app.skill.models import Skill
 from app.team.models import Team
+from app.user.function import return_team_of_user, return_position_of_user
+from app.user.models import Profile
 
 requirement_admin = user_passes_test(lambda u: u.is_staff, login_url='admin:admin_login')
 
@@ -75,6 +77,92 @@ class AdminProfileView(DetailView):
 
 
 AdminProfileView = AdminProfileView.as_view()
+
+""" ----------------------------------------------------------------------
+    View User Admin
+-----------------------------------------------------------------------"""
+
+
+class AdminUserIndex(ListView):
+    model = User
+    template_name = 'admin/user/admin_user_index.html'
+    paginate_by = 15
+    context_object_name = 'list_user'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'User Index'
+        return super(AdminUserIndex, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return User.objects.filter(is_staff=False, is_superuser=False)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AdminUserIndex, self).get_context_data(**kwargs)
+        for user in ctx['list_user']:
+            user.team = return_team_of_user(user)
+            user.position = return_position_of_user(user)
+            user.skill = count_skill_of_user(user)
+        return ctx
+
+
+AdminUserIndexView = AdminUserIndex.as_view()
+
+
+class AdminUserCreate(CreateView):
+    model = User
+    template_name = 'admin/user/admin_user_create.html'
+    form_class = UserCreateFormView
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Create new user'
+        return super(AdminUserCreate, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['list_team'] = Team.objects.all()
+        ctx['list_position'] = Position.objects.all()
+        return ctx
+
+    def form_valid(self, form):
+        user = form.save(commit=True)
+        team = self.request.POST.get('team_id')
+        position = self.request.POST.get('position_id')
+        profile = Profile.objects.create(user=user, team=Team.objects.get(id=team), position=Position.objects.get(id=position))
+        profile.save()
+        return super(AdminUserCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('admin:admin_user_index')
+
+
+AdminUserCreateView = AdminUserCreate.as_view()
+
+
+class AdminUserDetail(DetailView):
+    model = User
+    template_name = 'admin/user/admin_user_detail.html'
+    context_object_name = 'detail_user'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'User detail'
+        return super(AdminUserDetail, self).dispatch(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        return User.objects.get(username=self.kwargs['username'])
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['detail_user'].team = return_team_of_user(ctx['detail_user'])
+        ctx['detail_user'].position = return_position_of_user(ctx['detail_user'])
+        ctx['detail_user'].skill = count_skill_of_user(ctx['detail_user'])
+        ctx['list_skill_user'] = return_list_skill_of_user(ctx['detail_user'])
+        return ctx
+
+
+AdminUserDetailView = AdminUserDetail.as_view()
 
 """ ----------------------------------------------------------------------
     View Team Admin
