@@ -49,4 +49,6 @@ urlpatterns = [
     # Position
     url(r'^/position$', views.AdminPositionIndexView, name='admin_position_index'),
     url(r'^/position/create$', views.AdminPositionCreateView, name='admin_position_create'),
+    # url(r'^/position/detail/(?P<slug>[\w-]+)$', views.AdminPositionDetailView, name='admin_position_detail'),
+    url(r'^/position/edit/(?P<slug>[\w-]+)$', views.AdminPositionEditView, name='admin_position_edit'),
 ]

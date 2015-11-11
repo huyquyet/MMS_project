@@ -502,26 +502,15 @@ class AdminSkillEdit(UpdateView):
 
     @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
-        self.request.session['title'] = 'Skill Edit'
+        self.request.session['title'] = 'Team Edit'
         return super().dispatch(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['list_leader_team'] = return_list_member_leader(self.object)
+        return ctx
+
     def form_valid(self, form):
-        # team = form.save(commit=False)
-        # id_new_leader = self.request.POST.get('id_leader', '')
-        # leader_team = return_leader_of_team(self.object)
-        # try:
-        #     if id_new_leader != leader_team.id:
-        #         team.leader = User.objects.get(id=id_new_leader)
-        #         profile_leader_team = Profile.objects.get(user=User.objects.get(id=leader_team.id))
-        #         profile_id_new_leader = Profile.objects.get(user=User.objects.get(id=id_new_leader))
-        #         profile_leader_team.position = Position.objects.get(id=2)
-        #         profile_id_new_leader.position = Position.objects.get(id=3)
-        #         profile_leader_team.save(())
-        #         profile_id_new_leader.save(())
-        #         team.save()
-        #         form.save()
-        # except:
-        #     pass
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -568,3 +557,33 @@ class AdminPositionCreate(CreateView):
 
 
 AdminPositionCreateView = AdminPositionCreate.as_view()
+
+
+class AdminPositionDetail(DetailView):
+    model = Position
+    template_name = 'position/admin/admin_position_detail.html'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Position Detail'
+        return super().dispatch(request, *args, **kwargs)
+
+
+AdminPositionDetailView = AdminPositionDetail.as_view()
+
+
+class AdminPositionEdit(UpdateView):
+    model = Position
+    template_name = 'position/admin/admin_position_edit.html'
+    form_class = PositionCreateFormView
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Position Edit'
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('admin:admin_position_index')
+
+
+AdminPositionEditView = AdminPositionEdit.as_view()
