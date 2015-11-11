@@ -35,6 +35,11 @@ urlpatterns = [
     # Project
     url(r'^/project$', views.AdminProjectIndexView, name='admin_project_index'),
     url(r'^/project/create$', views.AdminProjectCreateView, name='admin_project_create'),
+    url(r'^/project/detail/(?P<slug>[\w-]+)$', views.AdminProjectDetailView, name='admin_project_detail'),
+    url(r'^/project/edit/(?P<slug>[\w-]+)$', views.AdminProjectEditView, name='admin_project_edit'),
+    url(r'^/project/edit/(?P<slug>[\w-]+)/team$', views.AdminProjectEditTeamView, name='admin_project_edit_team'),
+    url(r'^/project/add_team$', views.add_team_project, name='admin_project_add_team'),
+    url(r'^/project/remover_team$', views.remover_team_project, name='admin_project_remover_team'),
 
     ##########################################################
     ##########################################################

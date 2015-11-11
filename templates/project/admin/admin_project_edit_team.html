@@ -1,0 +1,104 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block content_header %}
+    <div class="col-lg-9 col-lg-offset-2" style="padding-bottom: 10px;">
+        <span class="text-blue pull-left">Update Project Team</span>
+        <span class="pull-right"><a href="javascript:history.back()" role="button" class="btn btn-danger">Back</a></span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="row" style="padding: 0 5px 0 5px">
+            <div class="col-lg-10 col-lg-offset-1 bg-gray-light">
+                <div class="row">
+                    <div class="col-lg-6 ">
+                        <legend>
+                            <span>Team of Project</span>
+                        </legend>
+                        <div class="thumbnail" style="margin-top:5px; ">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="col-lg-1 ">Stt</th>
+                                    <th class="col-lg-6">Name</th>
+                                    <th class="col-lg-3">Member</th>
+                                    <th class="col-lg-1">Member</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for obj in list_team_of_project %}
+                                    <tr>
+                                        <td class="col-lg-1"><span>{{ forloop.counter }}</span>
+                                        </td>
+                                        <td class="col-lg-6"><span>{{ obj.name }}</span>
+                                        </td>
+                                        <td class="col-lg-3"><span>{{ obj.member }}</span>
+                                        </td>
+                                        <td class="col-lg-1">
+                                            {% if status == 0 or status == 1 %}
+                                                <button type="button" class="btn btn-danger btn-xs form-control disabled">Remover</button>
+                                            {% else %}
+                                                <span>
+                                                <form action="{% url 'admin:admin_project_remover_team' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" value="{{ object.id }}" name="id_project">
+                                                    <input type="hidden" value="{{ obj.id }}" name="id_team">
+                                                    <button type="submit" class="btn btn-danger btn-xs form-control">Remover</button>
+                                                </form>
+                                            </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <legend>
+                            <span>Add new Team</span>
+                        </legend>
+                        <div class="thumbnail" style="margin-top:5px; ">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="col-lg-1 ">Stt</th>
+                                    <th class="col-lg-6">Name</th>
+                                    <th class="col-lg-3">Member</th>
+                                    <th class="col-lg-1"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for obj in list_team_not_of_project %}
+                                    <tr>
+                                        <td class="col-lg-1"><span>{{ forloop.counter }}</span>
+                                        </td>
+                                        <td class="col-lg-6"><span>{{ obj.name }}</span>
+                                        </td>
+                                        <td class="col-lg-3"><span>{{ obj.member }}</span>
+                                        </td>
+                                        <td class="col-lg-1">
+                                            {% if status == 0 or status == 1 %}
+                                                <button type="button" class="btn btn-danger btn-xs form-control disabled">Add</button>
+                                            {% else %}
+                                                <span>
+                                                <form action="{% url 'admin:admin_project_add_team' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" value="{{ object.id }}" name="id_project">
+                                                    <input type="hidden" value="{{ obj.id }}" name="id_team">
+                                                    <button type="submit" class="btn btn-danger btn-xs form-control">Add</button>
+                                                </form>
+                                            </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

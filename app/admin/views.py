@@ -6,15 +6,18 @@ from django.contrib.auth.decorators import user_passes_test
 
 # Create your views here.
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, DetailView, ListView, CreateView, UpdateView
 from app.admin.forms import TeamCreateFormView, ProjectCreateFormView, SkillCreateFormView, PositionCreateFormView, UserCreateFormView, UserUpdateFormView, TeamEditFormView
 from app.position.models import Position
-from app.project.function import return_total_project_of_team, return_list_project_of_team
-from app.project.models import Project
+from app.project.function import return_total_project_of_team, return_list_project_of_team, return_total_team_of_project, return_list_team_of_project, return_list_leader_of_project, \
+    return_list_team_not_of_project
+from app.project.models import Project, TeamProject
 from app.skill.function import return_total_skill_of_team, count_user_of_skill, count_team_of_skill, count_skill_of_user, return_list_skill_of_user, return_list_skill_not_of_user, return_list_skill_of_team, \
     return_list_skill_not_of_team, return_list_user_of_skill, return_list_team_of_skill
 from app.skill.models import Skill, UserSkill
@@ -432,6 +435,114 @@ class AdminProjectCreate(CreateView):
 
 AdminProjectCreateView = AdminProjectCreate.as_view()
 
+
+class AdminProjectDetail(DetailView):
+    model = Project
+    template_name = 'project/admin/admin_project_detail.html'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Project Detail'
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        if ctx['object'].status == 0:
+            ctx['object'].status = 'Fail'
+        elif ctx['object'].status == 1:
+            ctx['object'].status = 'Success'
+        elif ctx['object'].status == 2:
+            ctx['object'].status = 'Progress'
+        elif ctx['object'].status == 3:
+            ctx['object'].status = 'Begin'
+        ctx['object'].total_team = return_total_team_of_project(self.object)
+        ctx['list_team_of_project'] = return_list_team_of_project(self.object)
+        return ctx
+
+
+AdminProjectDetailView = AdminProjectDetail.as_view()
+
+
+class AdminProjectEdit(UpdateView):
+    model = Project
+    template_name = 'project/admin/admin_project_edit.html'
+    form_class = ProjectCreateFormView
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Project Edit'
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['list_leader_project'] = return_list_leader_of_project(self.object)
+        return ctx
+
+    def form_valid(self, form):
+        pro = form.save(commit=False)
+        id_leader = self.request.POST.get('id_leader', None)
+        pro.leader = User.objects.get(id=id_leader)
+        pro.save()
+        form.save()
+        return super().form_valid(form)
+
+
+AdminProjectEditView = AdminProjectEdit.as_view()
+
+
+class AdminProjectEditTeam(DetailView):
+    model = Project
+    template_name = 'project/admin/admin_project_edit_team.html'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Project Team'
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['list_team_of_project'] = return_list_team_of_project(self.object)
+        ctx['list_team_not_of_project'] = return_list_team_not_of_project(self.object)
+        ctx['status'] = self.object.status
+        return ctx
+
+
+AdminProjectEditTeamView = AdminProjectEditTeam.as_view()
+
+
+def add_team_project(request):
+    id_project = request.POST.get('id_project', None)
+    id_team = request.POST.get('id_team', None)
+    if id_project is not None and id_team is not None:
+        try:
+            team = get_object_or_404(Team, id=id_team)
+            project = get_object_or_404(Project, id=id_project)
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect(reverse('admin:admin_project_index'))
+        team_project, create = TeamProject.objects.get_or_create(team=team, project=project)
+        team_project.status = True
+        team_project.save()
+        return HttpResponseRedirect(reverse('admin:admin_project_edit_team', kwargs={'slug': Project.objects.get(id=id_project).slug}))
+    else:
+        return HttpResponseRedirect(reverse('admin:admin_project_index'))
+
+
+def remover_team_project(request):
+    id_project = request.POST.get('id_project', None)
+    id_team = request.POST.get('id_team', None)
+    if id_project is not None and id_team is not None:
+        try:
+            team = get_object_or_404(Team, id=id_team)
+            project = get_object_or_404(Project, id=id_project)
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect(reverse('admin:admin_project_index'))
+        team_project, create = TeamProject.objects.get_or_create(team=team, project=project)
+        team_project.delete()
+        return HttpResponseRedirect(reverse('admin:admin_project_edit_team', kwargs={'slug': Project.objects.get(id=id_project).slug}))
+    else:
+        return HttpResponseRedirect(reverse('admin:admin_project_index'))
+
+
 """ ----------------------------------------------------------------------
     View Skill Admin
 -----------------------------------------------------------------------"""
@@ -489,6 +600,7 @@ class AdminSkillDetail(DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['list_user_of_skill'] = return_list_user_of_skill(self.object)
         ctx['list_team_of_skill'] = return_list_team_of_skill(self.object)
+
         return ctx
 
 
@@ -518,6 +630,7 @@ class AdminSkillEdit(UpdateView):
 
 
 AdminSkillEditView = AdminSkillEdit.as_view()
+
 """ ----------------------------------------------------------------------
     View Position Admin
 -----------------------------------------------------------------------"""

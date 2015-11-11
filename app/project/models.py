@@ -14,6 +14,14 @@ class Project(models.Model):
     content = models.TextField()
     start_date = models.DateTimeField(default=timezone.now)
     end_date = models.DateTimeField(null=True)
+    status = models.IntegerField(default=0)
+    """
+    0 : fail
+    1 : success
+    2 : progress
+    3 : begin
+
+    """
     team = models.ManyToManyField(Team, through="TeamProject", related_name='project')
 
     def __unicode__(self):

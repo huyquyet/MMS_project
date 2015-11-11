@@ -1,0 +1,69 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block content_header %}
+    <div class="col-lg-5 col-lg-offset-3" style="padding-bottom: 10px;">
+        <span class="text-blue pull-left">Project Detail</span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row" style="padding: 0 5px 0 5px">
+        <div class="col-lg-10 col-lg-offset-1 bg-gray-light">
+            <div class="row">
+                <div class="col-lg-4 ">
+                    <div>
+                        <h4> Name : <a href="#"> {{ object.name }}</a></h4>
+                    </div>
+                    <div>
+                        Leader : <span class=" text-danger" style="font-size: 16px">{{ object.leader.first_name }} {{ object.leader.last_name }}</span><br>
+                        Start date : <span class=" text-danger" style="font-size: 16px">{{ object.start_date|date:"d-m-Y" }}</span><br>
+                        End date : <span class=" text-danger" style="font-size: 16px">{{ object.end_date|date:"d-m-Y" }}</span><br>
+                        Status : <span class=" text-danger" style="font-size: 16px">{{ object.status }}</span><br>
+                        Total team of project : <span class=" text-danger" style="font-size: 16px">{{ object.total_team }}</span><br>
+                    </div>
+                    <div>
+                        <span><a href="{% url 'admin:admin_project_edit' object.slug %}" role="button" class="btn btn-default">Edit</a></span>
+                    </div>
+
+                </div>
+                <div class="col-lg-8">
+                    <legend>
+                        Content
+                    </legend>
+                    {{ object.content }}
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-10 col-lg-offset-1  pad" style=" margin-top: 5px; background-color: #BABCAD">
+            <div class="row">
+                <div class="col-lg-7">
+                    <legend>
+                        <span>Team</span>
+                        <a href="{% url 'admin:admin_project_edit_team' object.slug %}" role="button"
+                           class="btn btn-success btn-xs pull-right  {% if object.status == 'Fail' or object.status == 'Success' %}disabled{% endif %}">Edit</a></span>
+                    </legend>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-lg-1 ">Stt</th>
+                            <th class="col-lg-6">Name</th>
+                            <th class="col-lg-3">Member</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for obj in list_team_of_project %}
+                            <tr>
+                                <td class="col-lg-1"><span>{{ forloop.counter }}</span>
+                                </td>
+                                <td class="col-lg-6"><span>{{ obj.name }}</span>
+                                </td>
+                                <td class="col-lg-3"><span>{{ obj.member }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
