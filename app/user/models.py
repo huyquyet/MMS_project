@@ -12,5 +12,5 @@ class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
     avata = models.ImageField(upload_to=settings.AVATA_DIR, max_length=255, default='avata/default.jpg', blank=False)
     description = models.TextField(default='', null=True)
-    team = models.ForeignKey(Team, related_name='user', null=True)
+    team = models.ForeignKey(Team, related_name='user', default=4, null=True)
     position = models.ForeignKey(Position, related_name='profile', default=1, null=True)

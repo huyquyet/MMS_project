@@ -26,6 +26,9 @@ urlpatterns = [
     url(r'^/team$', views.AdminTeamIndexView, name='admin_team_index'),
     url(r'^/team/create$', views.AdminTeamCreateView, name='admin_team_create'),
     url(r'^/team/detail/(?P<slug>[\w-]+)$', views.AdminTeamDetailView, name='admin_team_detail'),
+    url(r'^/team/edit/(?P<slug>[\w-]+)$', views.AdminTeamEditView, name='admin_team_edit'),
+    url(r'^/team/edit/(?P<slug>[\w-]+)/skill$', views.AdminTeamEditSkillView, name='admin_team_edit_skill'),
+    url(r'^/team/add/skill$', views.add_skill_team, name='admin_team_add_skill'),
 
     ##########################################################
     ##########################################################

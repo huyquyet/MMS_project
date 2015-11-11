@@ -11,13 +11,14 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView, DetailView, ListView, CreateView, UpdateView
-from app.admin.forms import TeamCreateFormView, ProjectCreateFormView, SkillCreateFormView, PositionCreateFormView, UserCreateFormView, UserUpdateFormView
+from app.admin.forms import TeamCreateFormView, ProjectCreateFormView, SkillCreateFormView, PositionCreateFormView, UserCreateFormView, UserUpdateFormView, TeamEditFormView
 from app.position.models import Position
 from app.project.function import return_total_project_of_team, return_list_project_of_team
 from app.project.models import Project
-from app.skill.function import return_total_skill_of_team, count_user_of_skill, count_team_of_skill, count_skill_of_user, return_list_skill_of_user, return_list_skill_not_of_user, return_list_skill_of_team
+from app.skill.function import return_total_skill_of_team, count_user_of_skill, count_team_of_skill, count_skill_of_user, return_list_skill_of_user, return_list_skill_not_of_user, return_list_skill_of_team, \
+    return_list_skill_not_of_team
 from app.skill.models import Skill, UserSkill
-from app.team.function import return_total_user_of_team, return_list_member_of_team
+from app.team.function import return_total_user_of_team, return_list_member_of_team, return_list_member_leader, return_leader_of_team
 from app.team.models import Team
 from app.user.function import return_team_of_user, return_position_of_user
 from app.user.models import Profile
@@ -323,6 +324,82 @@ class AdminTeamDetail(DetailView):
 
 
 AdminTeamDetailView = AdminTeamDetail.as_view()
+
+
+class AdminTeamEdit(UpdateView):
+    model = Team
+    template_name = 'team/admin/admin_team_edit.html'
+    context_object_name = 'edit_team'
+    form_class = TeamEditFormView
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Team Edit'
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['list_leader_team'] = return_list_member_leader(self.object)
+        return ctx
+
+    def form_valid(self, form):
+        team = form.save(commit=False)
+        id_new_leader = self.request.POST.get('id_leader', '')
+        leader_team = return_leader_of_team(self.object)
+        try:
+            if id_new_leader != leader_team.id:
+                team.leader = User.objects.get(id=id_new_leader)
+                profile_leader_team = Profile.objects.get(user=User.objects.get(id=leader_team.id))
+                profile_id_new_leader = Profile.objects.get(user=User.objects.get(id=id_new_leader))
+                profile_leader_team.position = Position.objects.get(id=2)
+                profile_id_new_leader.position = Position.objects.get(id=3)
+                profile_leader_team.save(())
+                profile_id_new_leader.save(())
+                team.save()
+                form.save()
+        except:
+            pass
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('admin:admin_team_detail', kwargs={'slug': self.object.slug})
+
+
+AdminTeamEditView = AdminTeamEdit.as_view()
+
+
+class AdminTeamEditSkill(DetailView):
+    model = Team
+    template_name = 'team/admin/admin_team_edit_skill.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Team update skill'
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AdminTeamEditSkill, self).get_context_data(**kwargs)
+        ctx['list_skill_of_team'] = return_list_skill_of_team(self.object)
+        ctx['list_skill_not_of_team'] = return_list_skill_not_of_team(self.object)
+        return ctx
+
+
+AdminTeamEditSkillView = AdminTeamEditSkill.as_view()
+
+
+def add_skill_team(request):
+    id_skill = request.POST.get('id_skill', None)
+    id_team = request.POST.get('id_team', None)
+    if id_team is not None:
+        if id_skill is None:
+            return HttpResponseRedirect(reverse('admin:admin_team_edit_skill', kwargs={'slug': Team.objects.get(id=id_team).slug}))
+        else:
+            skill = Skill.objects.get(id=id_skill)
+            skill.team.add(Team.objects.get(id=id_team))
+            skill.save()
+            return HttpResponseRedirect(reverse('admin:admin_team_edit_skill', kwargs={'slug': Team.objects.get(id=id_team).slug}))
+    else:
+        return HttpResponseRedirect(reverse('admin:admin_team_index'))
+
 
 """ ----------------------------------------------------------------------
     View Project Admin

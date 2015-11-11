@@ -3,14 +3,52 @@ from app.team.models import Team
 
 __author__ = 'FRAMGIA\nguyen.huy.quyet'
 
-
-def return_total_skill_of_team(team):
-    return Skill.objects.filter(team=team).count()
+"""------------------------------------------------------------
+    Skill
+------------------------------------------------------------"""
 
 
 def count_user_of_skill(skill):
     result = UserSkill.objects.filter(skill=skill).count()
     return result
+
+
+"""------------------------------------------------------------
+    Team
+------------------------------------------------------------"""
+
+
+def return_total_skill_of_team(team):
+    return Skill.objects.filter(team=team).count()
+
+
+def count_team_of_skill(skill):
+    result = Team.objects.filter(skill=skill).count()
+    return result
+
+
+def return_list_skill_of_team(team):
+    result_team = Team.objects.get(id=team.id)
+    result = result_team.skill.all()
+    return result
+
+
+def return_list_skill_not_of_team(team):
+    # list skill of team
+    team_skill = Skill.objects.filter(team=team)
+
+    # list all skill
+    all_skill = Skill.objects.all()
+
+    # list skill not of user
+    result = set(all_skill).difference(set(team_skill))
+
+    return result
+
+
+"""------------------------------------------------------------
+    User
+------------------------------------------------------------"""
 
 
 def count_skill_of_user(user):
@@ -35,15 +73,4 @@ def return_list_skill_not_of_user(user):
 
     # list skill not of user
     result = set(all_skill).difference(set(skill))
-    return result
-
-
-def count_team_of_skill(skill):
-    result = Team.objects.filter(skill=skill).count()
-    return result
-
-
-def return_list_skill_of_team(team):
-    result_team = Team.objects.get(id=team.id)
-    result = result_team.skill.all()
     return result

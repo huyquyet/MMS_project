@@ -19,7 +19,7 @@
                         Total Skill : <span class=" text-danger" style="font-size: 16px">{{ total_skill }}</span><br>
                     </div>
                     <div>
-                        <span><a href="#" role="button" class="btn btn-success">Edit</a></span>
+                        <span><a href={% url 'admin:admin_team_edit' detail_team.slug %} role="button" class="btn btn-success">Edit</a></span>
                     </div>
 
                 </div>
@@ -68,18 +68,16 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <legend>
                         <span>Skill</span>
-                        <span style="color: white; margin-right: 25px;" class="pull-right"><a href="#" role="button" class="btn btn-info btn-xs">Edit</a> </span>
+                        <span style="color: white; margin-right: 25px;" class="pull-right"><a href="{% url 'admin:admin_team_edit_skill' detail_team.slug %}" role="button" class="btn btn-info btn-xs">Edit</a> </span>
                     </legend>
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th class="col-lg-1 ">Stt</th>
+                            <th class="col-lg-2 ">Stt</th>
                             <th class="col-lg-5">Name</th>
-                            <th class="col-lg-3">Level</th>
-                            <th class="col-lg-2">Year</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -87,18 +85,14 @@
                             <tr>
                                 <td class="col-lg-2"><span>{{ forloop.counter }}</span>
                                 </td>
-                                <td class="col-lg-5"><span>{{ obj.skill.name }}</span>
-                                </td>
-                                <td class="col-lg-3"><span>{{ obj.level }}</span>
-                                </td>
-                                <td class="col-lg-2"><span>{{ obj.year }}</span>
+                                <td class="col-lg-5"><span>{{ obj.name }}</span>
                                 </td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-6">
                     <legend>
                         Project
                     </legend>

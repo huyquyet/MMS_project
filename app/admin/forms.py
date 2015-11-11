@@ -63,6 +63,17 @@ class TeamCreateFormView(forms.ModelForm):
         }
 
 
+class TeamEditFormView(forms.ModelForm):
+    class Meta:
+        model = Team
+        fields = ['name', 'slug', 'about_team']
+        widgets = {
+            'name': TextInput(attrs={'size': 70, 'required': True}),
+            'slug': TextInput(attrs={'size': 70, 'required': True}),
+            'about_team': Textarea(attrs={'rows': 7, 'cols': 70}),
+        }
+
+
 class ProjectCreateFormView(forms.ModelForm):
     class Meta:
         model = Project
