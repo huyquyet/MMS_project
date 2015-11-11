@@ -25,15 +25,15 @@
             <tbody>
             {% for obj in list_skill %}
                 <tr>
-                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_skill_index' %}">{{ obj.id }}</a>
+                    <td class="col-lg-1"><span class=" text-info">{{ obj.id }}</span>
                     </td>
-                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_skill_index' %}">{{ obj.name| truncatewords:10 }}</a>
+                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_skill_detail'  obj.slug %}">{{ obj.name| truncatewords:10 }}</a>
                     </td>
-                    <td class="col-lg-5"><a class=" text-info" href="{% url 'admin:admin_skill_index' %}">{{ obj.about_skill| truncatewords:17 }}</a>
+                    <td class="col-lg-5"><a class=" text-info" href="{% url 'admin:admin_skill_detail'  obj.slug %}">{{ obj.about_skill| truncatewords:17 }}</a>
                     </td>
-                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_skill_index' %}">{{ obj.count_team }}</a>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_skill_detail'  obj.slug %}">{{ obj.count_team }}</a>
                     </td>
-                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_skill_index' %}">{{ obj.count_user }}</a>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_skill_detail'  obj.slug %}">{{ obj.count_user }}</a>
                     </td>
 
                     <td class="col-lg-1">

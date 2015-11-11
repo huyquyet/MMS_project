@@ -16,7 +16,7 @@ from app.position.models import Position
 from app.project.function import return_total_project_of_team, return_list_project_of_team
 from app.project.models import Project
 from app.skill.function import return_total_skill_of_team, count_user_of_skill, count_team_of_skill, count_skill_of_user, return_list_skill_of_user, return_list_skill_not_of_user, return_list_skill_of_team, \
-    return_list_skill_not_of_team
+    return_list_skill_not_of_team, return_list_user_of_skill, return_list_team_of_skill
 from app.skill.models import Skill, UserSkill
 from app.team.function import return_total_user_of_team, return_list_member_of_team, return_list_member_leader, return_leader_of_team
 from app.team.models import Team
@@ -41,11 +41,6 @@ AdminIndexView = AdminIndex.as_view()
 class AdminLogin(FormView):
     form_class = AdminAuthenticationForm
     template_name = 'admin/admin_login.html'
-
-
-    # def dispatch(self, request, *args, **kwargs):
-    #     self.request.session['title'] = 'Admin index'
-    #     super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         link = self.request.POST.get('next', False)
@@ -480,6 +475,60 @@ class AdminSkillCreate(CreateView):
 
 AdminSkillCreateView = AdminSkillCreate.as_view()
 
+
+class AdminSkillDetail(DetailView):
+    model = Skill
+    template_name = 'skill/admin/admin_skill_detail.html'
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Skill Detail'
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['list_user_of_skill'] = return_list_user_of_skill(self.object)
+        ctx['list_team_of_skill'] = return_list_team_of_skill(self.object)
+        return ctx
+
+
+AdminSkillDetailView = AdminSkillDetail.as_view()
+
+
+class AdminSkillEdit(UpdateView):
+    model = Skill
+    template_name = 'skill/admin/admin_skill_edit.html'
+    form_class = SkillCreateFormView
+
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        self.request.session['title'] = 'Skill Edit'
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        # team = form.save(commit=False)
+        # id_new_leader = self.request.POST.get('id_leader', '')
+        # leader_team = return_leader_of_team(self.object)
+        # try:
+        #     if id_new_leader != leader_team.id:
+        #         team.leader = User.objects.get(id=id_new_leader)
+        #         profile_leader_team = Profile.objects.get(user=User.objects.get(id=leader_team.id))
+        #         profile_id_new_leader = Profile.objects.get(user=User.objects.get(id=id_new_leader))
+        #         profile_leader_team.position = Position.objects.get(id=2)
+        #         profile_id_new_leader.position = Position.objects.get(id=3)
+        #         profile_leader_team.save(())
+        #         profile_id_new_leader.save(())
+        #         team.save()
+        #         form.save()
+        # except:
+        #     pass
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('admin:admin_skill_detail', kwargs={'slug': self.object.slug})
+
+
+AdminSkillEditView = AdminSkillEdit.as_view()
 """ ----------------------------------------------------------------------
     View Position Admin
 -----------------------------------------------------------------------"""

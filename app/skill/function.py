@@ -13,6 +13,17 @@ def count_user_of_skill(skill):
     return result
 
 
+def return_list_user_of_skill(skill):
+    result = UserSkill.objects.filter(skill=skill)
+
+    return result
+
+
+def return_list_team_of_skill(skill):
+    result = Team.objects.filter(skill=skill)
+    return result
+
+
 """------------------------------------------------------------
     Team
 ------------------------------------------------------------"""

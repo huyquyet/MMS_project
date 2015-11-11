@@ -1,0 +1,86 @@
+{% extends 'admin/layout/base_admin.html' %}
+{% block content_header %}
+    <div class="col-lg-5 col-lg-offset-1" style="padding-bottom: 10px;">
+        <span class="text-blue pull-left">Skill Detail</span>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row" style="padding: 0 5px 0 5px">
+        <div class="col-lg-10 col-lg-offset-1 bg-gray-light">
+            <div class="row">
+                <div class="col-lg-4 ">
+                    <div>
+                        <h4> Name : <a href="#"> {{ object.name }}</a></h4>
+                    </div>
+                    <div>
+                        <span><a href="{% url 'admin:admin_skill_edit' object.slug %}" role="button" class="btn btn-success">Edit</a></span>
+                    </div>
+
+                </div>
+                <div class="col-lg-8">
+                    <legend>
+                        About Skill
+                    </legend>
+                    {{ object.about_skill }}
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-10 col-lg-offset-1  pad" style=" margin-top: 5px; background-color: #BABCAD">
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-1">
+                    <legend>
+                        User
+                    </legend>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-lg-1 ">Stt</th>
+                            <th class="col-lg-7">Name</th>
+                            <th class="col-lg-2">Year</th>
+                            <th class="col-lg-2">Level</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for obj in list_user_of_skill %}
+                            <tr>
+                                <td class="col-lg-1"><span>{{ forloop.counter }}</span>
+                                </td>
+                                <td class="col-lg-7"><span>{{ obj.user.first_name }} {{ obj.user.last_name }}</span>
+                                </td>
+                                <td class="col-lg-2"><span>{{ obj.year }}</span>
+                                </td>
+                                <td class="col-lg-2"><span>{{ obj.level }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-4">
+                    <legend>
+                        <span>Team</span>
+                    </legend>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-lg-2 ">Stt</th>
+                            <th class="col-lg-10">Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for obj in list_team_of_skill %}
+                            <tr>
+                                <td class="col-lg-2"><span>{{ forloop.counter }}</span>
+                                </td>
+                                <td class="col-lg-10"><span>{{ obj.name }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -41,6 +41,8 @@ urlpatterns = [
     # Skill
     url(r'^/skill$', views.AdminSkillIndexView, name='admin_skill_index'),
     url(r'^/skill/create$', views.AdminSkillCreateView, name='admin_skill_create'),
+    url(r'^/skill/detail/(?P<slug>[\w-]+)$', views.AdminSkillDetailView, name='admin_skill_detail'),
+    url(r'^/skill/edit/(?P<slug>[\w-]+)$', views.AdminSkillEditView, name='admin_skill_edit'),
 
     ##########################################################
     ##########################################################
