@@ -128,7 +128,10 @@ class AdminUserCreate(CreateView):
         return ctx
 
     def form_valid(self, form):
-        user = form.save(commit=True)
+        user = form.save(commit=False)
+        user.set_password(self.request.POST.get('password'))
+        user.save()
+        form.save()
         team = self.request.POST.get('team_id')
         position = self.request.POST.get('position_id')
         profile = Profile.objects.create(user=user, team=Team.objects.get(id=team), position=Position.objects.get(id=position))
@@ -291,6 +294,12 @@ class AdminTeamCreate(CreateView):
 
     def get_success_url(self):
         return reverse('admin:admin_team_index')
+
+    def form_valid(self, form):
+        team = form.save()
+        team.leader = User.objects.get(id=1)
+        team.save()
+        return super().form_valid(form)
 
 
 AdminTeamCreateView = AdminTeamCreate.as_view()

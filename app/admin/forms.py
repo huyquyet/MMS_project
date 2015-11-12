@@ -7,6 +7,7 @@ from app.position.models import Position
 from app.project.models import Project
 from app.skill.models import Skill
 from app.team.models import Team
+from app.user.models import Profile
 
 __author__ = 'FRAMGIA\nguyen.huy.quyet'
 
@@ -36,13 +37,31 @@ class UserUpdateFormView(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['first_name', 'last_name', 'email', 'email_confirm']
         widgets = {
-            'first_name': TextInput(attrs={'size': 40, 'required': True}),
+            'first_name': TextInput(attrs={'size': 50, 'required': True}),
             'last_name': TextInput(attrs={'size': 50, 'required': True}),
-            'email': TextInput(attrs={'size': 70, 'required': True}),
-            # 'email_com': TextInput(attrs={'size': 70, 'required': True}),
+            'email': TextInput(attrs={'size': 50, 'required': True}),
+            'email_com': TextInput(attrs={'size': 50, 'required': True}),
         }
+
+
+class UserUpdateForm(forms.ModelForm):
+    first_name = forms.CharField(label=_("First name"))
+    last_name = forms.CharField(label=_("Last name"))
+    email = forms.CharField(label=_("Email "), widget=forms.EmailInput)
+    email_confirm = forms.CharField(label=_("Email confirmation"), widget=forms.EmailInput,
+                                    help_text=_("Enter the same password as above, for verification."))
+
+    class Meta:
+        model = Profile
+        fields = ['avata', 'description']
+        # widgets = {
+        #     'first_name': TextInput(attrs={'size': 50, 'required': True}),
+        #     'last_name': TextInput(attrs={'size': 50, 'required': True}),
+        #     'email': TextInput(attrs={'size': 50, 'required': True}),
+        #     'email_com': TextInput(attrs={'size': 50, 'required': True}),
+        # }
 
     def clean_email_confirm(self):
         email1 = self.cleaned_data.get('email')

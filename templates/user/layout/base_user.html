@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        {% block title %}{{ request.session.title }}{% endblock %}
+    </title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    {#    <link rel="stylesheet" href="{% static 'base.css' %}"/>#}
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"/>
+    <!-- style css -->
+    {#    <link rel="stylesheet" href="{% static 'user/style_user.css' %}"/>#}
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'admin/dist/css/AdminLTE.min.css' %}">
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+          page. However, you can choose any other skin. Make sure you
+          apply the skin class to the body tag so the changes take effect.
+    -->
+    <link rel="stylesheet" href="{% static 'admin/dist/css/skins/skin-blue.min.css' %}">
+
+    <!-- REQUIRED JS SCRIPTS -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="{% static 'admin/plugins/jQuery/jQuery-2.1.4.min.js' %}"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src=" {% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'admin/dist/js/app.min.js' %}"></script>
+
+    <!-- Optionally, you can add Slimscroll and FastClick plugins.
+         Both of these plugins are recommended to enhance the
+         user experience. Slimscroll is required when using the
+         fixed layout. -->
+    {#    <meta charset="UTF-8">#}
+    {#    <title></title>#}
+</head>
+<body style="width:70%; margin: 0 auto;">
+<div class="row" style="padding: 5px 0 10px 20px">
+    <ul class="nav nav-tabs">
+        {#        {% if user.is_authenticated %}#}
+        <li><a href="{% url 'team:team_index' %}">Team</a></li>
+        <li><a href="{% url 'user:user_member' %}">Member</a></li>
+        <li><a href="{% url 'project:project_index' %}">Project</a></li>
+        <li><a href="{% url 'skill:skill_index' %}">Skill</a></li>
+        <li><a href="{% url 'position:position_index' %}">Position</a></li>
+        <div class="pull-right" style="margin-right: 50px;">
+            {% include 'user/layout/header.html' %}
+        </div>
+        {#        {% else %}#}
+        {#            <li class="active"><a href="#book" data-toggle="tab">Book</a></li>#}
+        {#            <li><a href="#following" data-toggle="tab">Following</a></li>#}
+        {#            <li><a href="#followers" data-toggle="tab">Followers</a></li>#}
+        {#            <li><a href="#write-review" data-toggle="tab">Write review</a></li>#}
+        {#            <div class="pull-right" style="margin-right: 50px;">#}
+        {#                {% include 'user/layout/header.html' %}#}
+        {#            </div>#}
+        {#        {% endif %}#}
+    </ul>
+    <div>
+        {% block content_header %}
+            Page Header
+            <small>Optional description</small>
+        {% endblock %}
+    </div>
+    <div>
+        {% block content %}
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade active in" id="team">
+                    {#                {% include 'team/user/index.html' %}#}
+                </div>
+                <div class="tab-pane fade" id="member">
+                    {#                {% include 'user/user/index.html' %}#}
+                    sf
+
+                </div>
+                <div class="tab-pane fade" id="project">
+                    {#                {% include 'project/user/index.html' %}#}asfaf
+
+                </div>
+                <div class="tab-pane fade" id="position">
+                    {#                {% include 'position/user/index.html' %}#}ádfafafdaf
+                    âfafsf
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>

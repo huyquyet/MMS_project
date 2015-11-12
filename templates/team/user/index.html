@@ -1,0 +1,62 @@
+{% extends 'user/layout/base_user.html' %}
+{% block content_header %}
+    <div class="col-lg-8 " style="padding-bottom: 10px; padding-top: 10px;">
+        <span class="text-blue pull-left" style="font-size: 24px;">Team Index</span>
+
+        <form action="" method="get" class="pull-right">
+            {% csrf_token %}
+            <input type="text" value="" name="search" class="form-control" placeholder="Enter something" style="width: 400px;">
+        </form>
+
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row" style="padding: 0 5px 0 5px">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="col-lg-1">ID</th>
+                <th class="col-lg-2">Name</th>
+                <th class="col-lg-2">Leader</th>
+                <th class="col-lg-4">About</th>
+                <th class="col-lg-1">Position</th>
+                <th class="col-lg-1">Skill</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in list_team %}
+                <tr>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'team:team_detail' obj.slug %}">{{ obj.id }}</a>
+                    </td>
+                    <td class="col-lg-2"><a class=" text-info" href="{% url 'team:team_detail' obj.slug %}">{{ obj.name| truncatewords:10 }}</a>
+                    </td>
+                    <td class="col-lg-2"><a class=" text-info" href="{% url 'team:team_detail'  obj.slug %}">{{ obj.leader.first_name }} {{ obj.leader.last_name }}</a>
+                    </td>
+                    <td class="col-lg-4"><a class=" text-info" href="{% url 'team:team_detail' obj.slug %}">{{ obj.about_team }}</a>
+                    </td>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'team:team_detail'  obj.slug %}">{{ obj.position.name }}</a>
+                    </td>
+                    <td class="col-lg-1"><a class=" text-info" href="{% url 'team:team_detail'  obj.slug %}">{{ obj.total_skill }}</a>
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+                <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                    <span class="current">
+                    Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+                </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'user/layout/base_user.html' %}
+{% block content_header %}
+    <div class="col-lg-12">
+        <div class="col-lg-8 " style="padding-bottom: 10px; padding-top: 10px;">
+            <span class="text-blue pull-left" style="font-size: 24px;">Member Detail</span>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row" style="padding: 0 5px 0 5px">
+        <div class="col-lg-10 col-lg-offset-1 bg-gray-light">
+            <div class="row">
+                <div class="col-lg-2">
+                    <img src="{{ detail_user.profile.avata.url }}" class="thumbnail" alt="{{ detail_user.first_name }} {{ detail_user.last_name }}" width="100%"/>
+                </div>
+                <div class="col-lg-4 ">
+                    {#                    <div><span class="text-success text-bold "><h3>{{ object.title }}</h3></span></div>#}
+                    <div>
+                        <h4> Username : <a href="#"> {{ detail_user.username }}</a></h4>
+                    </div>
+                    <div>
+                        Full name : <span class=" text-danger" style="font-size: 16px">{{ detail_user.first_name }} {{ object.last_name }}</span><br>
+                        Email : <span class=" text-danger" style="font-size: 16px">{{ detail_user.email }}</span><br>
+                        Team : <span class=" text-danger" style="font-size: 16px">{{ detail_user.team.name }}</span><br>
+                        Position : <span class=" text-danger" style="font-size: 16px">{{ detail_user.position.name }}</span><br>
+                        Total Skill : <span class=" text-danger" style="font-size: 16px">{{ detail_user.skill }}</span><br>
+                        Current Project : <span class=" text-danger" style="font-size: 16px">{{ current_project.name }}</span><br>
+                    </div>
+                </div>
+                <div class="col-lg-6 ">
+                    <legend>
+                        Description
+                    </legend>
+                    {{ detail_user.description }}
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-10 col-lg-offset-1  pad" style=" margin-top: 5px;">
+            <div class="row">
+                <div class="col-lg-6">
+                    <legend>
+                        <span>Team</span>
+                    </legend>
+                </div>
+                <div class="col-lg-6">
+                    <legend>
+                        <span>Skill</span>
+                    </legend>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-lg-2 ">Stt</th>
+                            <th class="col-lg-5">Name</th>
+                            <th class="col-lg-3">Level</th>
+                            <th class="col-lg-2">Year</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for obj in list_skill_user %}
+                            <tr>
+                                <td class="col-lg-2"><span>{{ forloop.counter }}</span>
+                                </td>
+                                <td class="col-lg-5"><span>{{ obj.skill.name }}</span>
+                                </td>
+                                <td class="col-lg-3"><span>{{ obj.level }}</span>
+                                </td>
+                                <td class="col-lg-2"><span>{{ obj.year }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

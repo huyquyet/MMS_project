@@ -17,8 +17,8 @@
             <tr>
                 <th class="col-lg-1">ID</th>
                 <th class="col-lg-2">Name</th>
-                <th class="col-lg-1">Leader</th>
-                <th class="col-lg-5">About</th>
+                <th class="col-lg-2">Leader</th>
+                <th class="col-lg-4">About</th>
                 <th class="col-lg-1">Position</th>
                 <th class="col-lg-1">Skill</th>
                 <th class="col-lg-1"><a href="{% url 'admin:admin_team_create' %}" role="button" class="btn btn-danger btn-sm">Create New</a></th>
@@ -31,9 +31,9 @@
                     </td>
                     <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_team_detail' obj.slug %}">{{ obj.name| truncatewords:10 }}</a>
                     </td>
-                    <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_team_index' %}">{{ obj.leader.first_name }} {{ obj.leader.last_name }}</a>
+                    <td class="col-lg-2"><a class=" text-info" href="{% url 'admin:admin_team_index' %}">{{ obj.leader.first_name }} {{ obj.leader.last_name }}</a>
                     </td>
-                    <td class="col-lg-5"><a class=" text-info" href="{% url 'admin:admin_team_detail' obj.slug %}">{{ obj.about_team }}</a>
+                    <td class="col-lg-4"><a class=" text-info" href="{% url 'admin:admin_team_detail' obj.slug %}">{{ obj.about_team }}</a>
                     </td>
                     <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_team_index' %}">{{ obj.position.name }}</a>
                     </td>

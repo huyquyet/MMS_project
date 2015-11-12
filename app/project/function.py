@@ -1,4 +1,4 @@
-from app.project.models import TeamProject
+from app.project.models import TeamProject, Project
 from app.team.function import return_total_user_of_team
 from app.team.models import Team
 
@@ -10,12 +10,15 @@ def return_total_project_of_team(team):
         result = TeamProject.objects.filter(team=team).count()
         return result
     else:
-        return 100
+        return 0
 
 
 def return_list_project_of_team(team):
     if TeamProject.objects.filter(team=team).exists():
-        result = TeamProject.objects.filter(team=team)
+        result_team_project = TeamProject.objects.filter(team=team)
+        result = []
+        for i in result_team_project:
+            result.append(Project.objects.get(id=i.project.id))
         return result
     else:
         return []

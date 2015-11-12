@@ -1,0 +1,61 @@
+{% if user.is_authenticated %}
+    <nav class="navbar navbar-static-top" role="navigation">
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <!-- Menu Toggle Button -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span>{{ user.first_name }} {{ user.last_name }}</span><span class="caret"></span>
+
+                    </a>
+{#                    <ul class="dropdown-menu dropdown_menu">#}
+{##}
+{#                        <li class="divider"></li>#}
+{#                        <li class="user-header">#}
+{#                            <div class="row" style="margin: 0">#}
+{#                                <div class="col-xs-4" style="padding:0;">#}
+{#                                    <img src="{{ user.user_profile.avata.url|default_if_none:'None' }}" alt="chua cos anh  id = {{ obj.user_profile.user.id }}" width="60px;">#}
+{#                                </div>#}
+{#                                <div class="col-xs-7" style="padding:0;">#}
+{#                                    <p style="font-size: 18px; text-align: left">#}
+{#                                        {{ user.first_name }} {{ user.last_name }}#}
+{#                                    </p>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="book-follow">#}
+{#                                <div class="text-manage">#}
+{#                                    Manage account#}
+{#                                </div>#}
+{#                                <div>#}
+{#                                    <div class="pull-left">#}
+{#                                        <a href="{% url 'book:user_manager_book' user.username %}" class="btn btn-default btn-flat" style="width: 100px;">Book</a>#}
+{#                                    </div>#}
+{#                                    <div class="pull-right">#}
+{#                                        <a href="{% url 'send:send_book_manager' %}" class="btn btn-default btn-flat" style="width: 100px;">Send book</a>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="follow">#}
+{#                                    <a href="{% url 'user:user_manager_follow' user.username %}" class="btn btn-default btn-flat" style="width: 210px">Follow</a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </li>#}
+{##}
+{#                        <li class="user-footer">#}
+{#                            <div class="pull-left">#}
+{#                                <a href="{% url 'user:user_edit_profile' user.username %}" class="btn btn-default btn-flat">Profile</a>#}
+{#                            </div>#}
+{#                            <div class="pull-right">#}
+{#                                <a href="{% url 'user:user_logout' %}" class="btn btn-default btn-flat">Sign out</a>#}
+{#                            </div>#}
+{#                        </li>#}
+{#                    </ul>#}
+
+                </li>
+                {#                            <li><a href="{% url 'user:user_logout' %}"> Singout</a></li>#}
+                <!-- Control Sidebar Toggle Button -->
+            </ul>
+        </div>
+    </nav>
+{% else %}
+    <h5><a href="#" class="text-success">Sign in</a></h5>
+{% endif %}

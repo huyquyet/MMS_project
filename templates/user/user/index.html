@@ -1,0 +1,53 @@
+{% extends 'user/layout/base_user.html' %}
+{% block content_header %}
+    <div class="col-lg-12">
+        <div class="col-lg-8 " style="padding-bottom: 10px; padding-top: 10px;">
+            <span class="text-blue pull-left" style="font-size: 24px;">Member Index</span>
+
+            <form action="" method="get" class="pull-right">
+                {% csrf_token %}
+                <input type="text" value="" name="search" class="form-control" placeholder="Enter something" style="width: 400px;">
+            </form>
+
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row" style="background-color: #F7F7F7; padding-top: 5px;">
+        {% for obj in page_obj %}
+            <div class=" col-lg-2 ">
+                <div class="thumbnail">
+                    <a href="{% url 'user:user_detail' obj.pk %}"> <img src="{{ obj.profile.avata.url }}" width="150" height="150"></a>
+
+                    <div class="caption">
+                        <div>
+                            <h5><a href="#">{{ obj.first_name }} {{ obj.last_name }}</a></h5>
+
+                            <p>Team : {{ obj.profile.team.name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        <div class="col-lg-offset-3">
+            <div class="pagination">
+                <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-default">Previous</a>
+                {% endif %}
+
+                    <span class="current">
+                    Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+                </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-default">Next</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
