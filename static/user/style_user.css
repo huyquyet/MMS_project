@@ -3,37 +3,37 @@
     /*margin: 0 auto;*/
 /*}*/
 
-body, ol, ul, td, th {
-    font-size: 16px;
-    margin: 0;
-}
+/*body, ol, ul, td, th {*/
+    /*font-size: 16px;*/
+    /*margin: 0;*/
+/*}*/
 
 /*body {*/
 /*background-color: #CCC;*/
 /*}*/
 
-body, p, ol, ul, td, th {
-    font-family: Georgia, "Times New Roman", serif;
-    line-height: 18px;
-    padding: 0;
-}
+/*body, p, ol, ul, td, th {*/
+    /*font-family: Georgia, "Times New Roman", serif;*/
+    /*line-height: 18px;*/
+    /*padding: 0;*/
+/*}*/
 
-.mainContent {
-    width: 1200px;
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    margin: 5px 300px;
-    text-align: left;
-}
+/*.mainContent {*/
+    /*width: 1200px;*/
+    /*/!*margin-left: auto;*!/*/
+    /*/!*margin-right: auto;*!/*/
+    /*margin: 5px 300px;*/
+    /*text-align: left;*/
+/*}*/
 
-.brs-content {
-    max-width: 1200px;
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    margin: 5px 300px;
-    text-align: left;
-    /*background: beige;*/
-}
+/*.brs-content {*/
+    /*max-width: 1200px;*/
+    /*/!*margin-left: auto;*!/*/
+    /*/!*margin-right: auto;*!/*/
+    /*margin: 5px 300px;*/
+    /*text-align: left;*/
+    /*/!*background: beige;*!/*/
+/*}*/
 
 /*body {*/
 /*padding-bottom: 40px;*/
@@ -170,10 +170,11 @@ body, p, ol, ul, td, th {
 }
 
 .user-header {
-    height: 210px;
+    height: 150px;
     /*padding: 10px;*/
     /*padding-top: 5px;*/
     text-align: center;
+    width: 200px;
 }
 
 .user-header > p {
@@ -189,19 +190,6 @@ body, p, ol, ul, td, th {
     font-size: 12px;
 }
 
-.user-header > .book-follow {
-    padding: 10px;
-}
-
-.user-header > .book-follow > .follow {
-    float: left;
-    margin: 7px 0 0 0;
-}
-
-.user-header > .book-follow > .text-manage {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
 
 .user-footer {
     background-color: #f9f9f9;
@@ -221,43 +209,3 @@ body, p, ol, ul, td, th {
 .user-footer .btn-default {
     color: #666666;
 }
-
-/*----------------------------------base_user_right--------------------------------------*/
-
-.book-rate {
-    margin-bottom: 10px;
-    background-color: #efefef;
-    margin-left: -7px;
-    width: 105%;
-}
-
-/*---------------------------------End base_user_right ----------------------------------*/
-
-/*---------------------------------- User Follow-----------------------------------------*/
-.user-follow {
-
-}
-
-.name-user {
-
-}
-
-.number-favorite {
-    margin: 10px 0 0 0;
-    font-size: 13px;
-}
-
-.button-follow {
-    margin: 10px 0 0 0;
-}
-
-/*--------------------------------- End User Follow ------------------------------------*/
-
-/*--------------------------------- User Activity --------------------------------------*/
-.content-activity {
-    background-color: #F7F7F7;
-    padding: 15px 0 0 10px;
-    width: 100%;
-}
-
-/*--------------------------------- End User Activity --------------------------------------*/

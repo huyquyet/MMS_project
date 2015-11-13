@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.forms import TextInput, Textarea, DateInput, PasswordInput
 from django.utils.translation import ugettext_lazy as _
+from import_export import resources, fields
 
 from app.position.models import Position
 from app.project.models import Project
@@ -50,18 +51,18 @@ class UserUpdateForm(forms.ModelForm):
     first_name = forms.CharField(label=_("First name"))
     last_name = forms.CharField(label=_("Last name"))
     email = forms.CharField(label=_("Email "), widget=forms.EmailInput)
-    email_confirm = forms.CharField(label=_("Email confirmation"), widget=forms.EmailInput,
-                                    help_text=_("Enter the same password as above, for verification."))
+    email_confirm = forms.CharField(label=_("Email confirmation"), widget=forms.EmailInput)
+    # help_text=_("Enter the same password as above, for verification.")
 
     class Meta:
         model = Profile
         fields = ['avata', 'description']
-        # widgets = {
-        #     'first_name': TextInput(attrs={'size': 50, 'required': True}),
-        #     'last_name': TextInput(attrs={'size': 50, 'required': True}),
-        #     'email': TextInput(attrs={'size': 50, 'required': True}),
-        #     'email_com': TextInput(attrs={'size': 50, 'required': True}),
-        # }
+        widgets = {
+            'first_name': TextInput(attrs={'size': 50, 'required': True}),
+            'last_name': TextInput(attrs={'size': 50, 'required': True}),
+            'email': TextInput(attrs={'size': 50, 'required': True}),
+            'email_confirm': TextInput(attrs={'size': 50, 'required': True}),
+        }
 
     def clean_email_confirm(self):
         email1 = self.cleaned_data.get('email')
@@ -126,3 +127,14 @@ class PositionCreateFormView(forms.ModelForm):
             'slug': TextInput(attrs={'size': 70, 'required': True}),
             'description': Textarea(attrs={'rows': 7, 'cols': 70}),
         }
+
+
+class CountryResource(resources.ModelResource):
+    full_title = fields.Field()
+
+    class Meta:
+        model = Profile
+        fields = ('user__username', 'full_title', 'avata', 'description', 'team__name', 'position__name', '',)
+
+    def dehydrate_full_title(self, profile):
+        return '%s by %s' % (profile.user.first_name, profile.user.last_name)

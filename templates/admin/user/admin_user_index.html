@@ -43,11 +43,11 @@
                     </td>
 
                     <td class="col-lg-1">
-                        <a href="{% url 'admin:admin_project_create' %}" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
+                        <a href="{% url 'admin:admin_user_update' obj.username %}" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
 
-                        <form action="{% url 'admin:admin_project_create' %}" method="post" style="float: right; margin: 0 20px 0 0">
+                        <form action="{% url 'admin:admin_user_delete' %}" method="post" style="float: right; margin: 0 20px 0 0">
                             {% csrf_token %}
-                            <input type="hidden" name="book_id" value="{{ obj.id }}">
+                            <input type="hidden" name="id_user" value="{{ obj.id }}">
                             <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover user ?')"> Delete</button>
                         </form>
                     </td>
@@ -72,4 +72,8 @@
                 </span>
         </div>
     </div>
+    <a href="{% url 'admin:some_view' %}" role="button" class="btn btn-danger btn-sm">Create CSV</a>
+    <a href="{% url 'admin:country_export' %}" role="button" class="btn btn-danger btn-sm">country_export CSV</a>
+    <a href="{% url 'admin:country_import' %}" role="button" class="btn btn-danger btn-sm">country_import CSV</a>
+    <a href="{% url 'admin:process_import' %}" role="button" class="btn btn-danger btn-sm">process_import CSV</a>
 {% endblock %}

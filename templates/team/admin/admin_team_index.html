@@ -40,11 +40,11 @@
                     <td class="col-lg-1"><a class=" text-info" href="{% url 'admin:admin_team_index' %}">{{ obj.total_skill }}</a>
                     </td>
                     <td class="col-lg-1">
-                        <a href="{% url 'admin:admin_team_create' %}" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
+                        <a href="{% url 'admin:admin_team_edit' obj.slug%}" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
 
-                        <form action="{% url 'admin:admin_team_create' %}" method="post" style="float: right; margin: 0 20px 0 0">
+                        <form action="{% url 'admin:admin_team_delete' %}" method="post" style="float: right; margin: 0 20px 0 0">
                             {% csrf_token %}
-                            <input type="hidden" name="book_id" value="{{ obj.id }}">
+                            <input type="hidden" name="id_team" value="{{ obj.id }}">
                             <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover user ?')"> Delete</button>
                         </form>
                     </td>

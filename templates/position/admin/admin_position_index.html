@@ -33,10 +33,10 @@
                     <td class="col-lg-1">
                         <a href="{% url 'admin:admin_position_edit' obj.slug %}" class="btn btn-success btn-xs no-margin" role="button">Edit</a>
 
-                        <form action="{% url 'admin:admin_project_create' %}" method="post" style="float: right; margin: 0 20px 0 0">
+                        <form action="{% url 'admin:admin_position_delete' %}" method="post" style="float: right; margin: 0 20px 0 0">
                             {% csrf_token %}
-                            <input type="hidden" name="book_id" value="{{ obj.id }}">
-                            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover user ?')"> Delete</button>
+                            <input type="hidden" name="id_position" value="{{ obj.id }}">
+                            <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want remover Position ?')"> Delete</button>
                         </form>
                     </td>
 

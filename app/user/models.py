@@ -14,3 +14,7 @@ class Profile(models.Model):
     description = models.TextField(default='', null=True)
     team = models.ForeignKey(Team, related_name='user', default=4, null=True)
     position = models.ForeignKey(Position, related_name='profile', default=1, null=True)
+
+    # def delete(self, *args, **kwargs):
+    #     self.user.delete()
+    #     return super(self.__class__, self).delete(*args, **kwargs)

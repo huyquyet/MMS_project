@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
 from app.team.models import Team
 from app.user.models import Profile
@@ -29,8 +30,19 @@ def return_leader_of_team(team):
 def return_list_member_leader(team):
     result = []
     result.append(return_leader_of_team(team))
-    for i in Profile.objects.exclude(user=result[0].user):
+    for i in Profile.objects.exclude(user=result[0].user).exclude(position__name='Leader'):
         result.append(i)
     for i in result:
         i.name = i.user.first_name + ' ' + i.user.last_name
     return result
+
+
+def set_team_user(member, id_team):
+    team = get_object_or_404(Team, pk=id_team)
+    member.team = team
+    member.save()
+
+
+def set_team_list_user(list_member, team):
+    for i in list_member:
+        set_team_user(i, team.id)
