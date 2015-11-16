@@ -24,6 +24,7 @@ from import_export.forms import ImportForm, ConfirmImportForm, os
 from import_export.resources import modelresource_factory
 from import_export.results import RowResult
 from app.admin.forms import TeamCreateFormView, ProjectCreateFormView, SkillCreateFormView, PositionCreateFormView, UserCreateFormView, UserUpdateFormView, TeamEditFormView, CountryResource
+from app.admin.serializers import UserSerializer
 from app.position.function import return_list_user_of_position, set_position_list_user
 from app.position.models import Position
 from app.project.function import return_total_project_of_team, return_list_project_of_team, return_total_team_of_project, return_list_team_of_project, return_list_leader_of_project, \
@@ -1072,3 +1073,131 @@ class ProfileProcessImport(View):
             print(confirm_form)
             url = reverse('admin:admin_team_index')
             return HttpResponseRedirect(url)
+
+
+"""--------------------------------------------------------------------------------------------------
+Test ret framework
+--------------------------------------------------------------------------------------------------"""
+
+
+# class JSONResponse(HttpResponse):
+#     """
+#     An HttpResponse that renders its content JSON
+#     """
+#
+#     def __init__(self, data, **kwargs):
+#         content = JSONRenderer().render(data)
+#         kwargs['content_type'] = 'application/json'
+#         super().__init__(content, **kwargs)
+#
+#
+# @api_view(['GET', 'POST'])
+# def profile_list(request, format=None):
+#     """
+#     list all profile, or create a new profile
+#     :param request:
+#     :return: get or create profile
+#     """
+#
+#     if request.method == 'GET':
+#         profile = Profile.objects.all()
+#         serializer = UserSerializer(profile, many=True)
+#         return JSONResponse(serializer.data)
+#     elif request.method == 'POST':
+#         data = JSONParser().parse(request)
+#         serializer = UserSerializer(data=data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return JSONResponse(serializer.data, status=201)
+#         return JSONResponse(serializer.errors, status=40)
+#
+#
+# @api_view(['GET', 'PUT', 'DELETE'])
+# def profile_detail(request, pk, format=None):
+#     """
+#     Retriave, update or delete
+#     :param request:
+#     :return: GET, PUT, DELETE
+#     """
+#     profile = get_object_or_404(Profile, pk=pk)
+#
+#     if request.method == 'GET':
+#         serializer = UserSerializer(profile)
+#         return JSONResponse(serializer.data)
+#     elif request.method == 'PUT':
+#         data = JSONParser().parse(request)
+#         serializer = UserSerializer(profile, data=data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return JSONResponse(serializer.data)
+#         return JSONResponse(serializer.errors, status=400)
+#     elif request.method == "DELETE":
+#         profile.delete()
+#         return HttpResponse(status=204)
+#
+#
+"""
+    API Class base view
+"""
+#
+#
+# class Profile_List(APIView):
+#     def get(self, request, *args, **kwargs):
+#         profile = Profile.objects.all()
+#         serializer = UserSerializer(profile, many=True)
+#         return Response(serializer.data)
+#
+#     def post(self, request, *args, **kwargs):
+#         profile = UserSerializer(data=request.data)
+#         if profile.is_valid():
+#             profile.save()
+#             return Response(profile.data, status=status.HTTP_201_CREATED)
+#         return Response(profile.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+"""
+Mixin class base view
+"""
+
+# from rest_framework import mixins
+from rest_framework import generics
+
+
+# class MixinProfileList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+#     queryset = Profile.objects.all()
+#     serializer_class = UserSerializer
+#
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+#
+#         # def post(self, request, *args, **kwargs):
+#         #     return self.create(request, *args, **kwargs)
+#
+#
+# class MixinProfileView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+#     queryset = Profile.objects.all()
+#     serializer_class = UserSerializer
+#
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+#
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+#
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
+
+
+"""
+Generic class base view
+"""
+
+
+class GenericProfileListView(generics.ListCreateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = UserSerializer
+
+
+class GenericProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = UserSerializer

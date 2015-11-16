@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from app.admin import views
 
@@ -67,4 +68,27 @@ urlpatterns = [
     # import
     url(r'^/import/$', views.ProfileImport.as_view(), name='country_import'),
     url(r'^/process_import/$', views.ProfileProcessImport.as_view(), name='process_import'),
+
+    ###
+
+    ###Test Rest Framework
+    ###
+
+    #################### def view
+    # url(r'^/rest/$', views.profile_list, name='profile_list'),
+    # url(r'^/rest/(?P<pk>[0-9]+)/$', views.profile_detail, name='profile_detail'),
+
+    ################## API View
+    # url(r'^/rest/$', views.Profile_List.as_view(), name='profile_list'),
+
+    ################# Mixin class base view
+    # url(r'^/rest/$', views.MixinProfileList.as_view(), name='profile_list'),
+    # url(r'^/rest/(?P<pk>[0-9]+)/$', views.MixinProfileView.as_view(), name='profile_list'),
+
+
+    ################# Generic class base view
+    url(r'^/rest/$', views.GenericProfileListView.as_view(), name='profile_list'),
+    url(r'^/rest/(?P<pk>[0-9]+)/$', views.GenericProfileDetailView.as_view(), name='profile_list'),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
