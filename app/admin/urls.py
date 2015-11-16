@@ -9,7 +9,6 @@ urlpatterns = [
     url(r'^/login$', views.AdminLoginView, name='admin_login'),
     url(r'^/logout$', views.logout_admin, name='admin_logout'),
     url(r'^/profile/(?P<username>[\w-]+)$', views.logout_admin, name='admin_detail_profile'),
-    url(r'^/csv$', views.some_view, name='some_view'),
 
     ##########################################################
     ##########################################################

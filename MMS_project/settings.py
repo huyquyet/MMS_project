@@ -46,6 +46,8 @@ INSTALLED_APPS = (
     'app.user',
     'app.admin',
     'import_export',
+    'rest_framework',
+
 )
 
 MIDDLEWARE_CLASSES = (

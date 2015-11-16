@@ -36,7 +36,6 @@ from app.team.function import return_total_user_of_team, return_list_member_of_t
 from app.team.models import Team
 from app.user.function import return_team_of_user, return_position_of_user, check_leader
 from app.user.models import Profile
-import csv
 from django.http import HttpResponse
 
 requirement_admin = user_passes_test(lambda u: u.is_staff, login_url='admin:admin_login')
@@ -826,28 +825,6 @@ def admin_delete_position(request):
 --------------------------------------------------------------------------------------------------"""
 
 
-def some_view(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="properties.csv"'
-    property_list = Profile.objects.all()
-    writer = csv.writer(response)
-    Profile._meta.get_all_field_names()
-    field_names = Profile._meta.get_all_field_names()
-    writer.writerow(field_names)
-    for property in property_list:
-        row = []
-        for name in field_names:
-            try:
-                row.append(str(getattr(property, name)))
-            except:
-                row.append(" ")
-        writer.writerow(row)
-    return response
-
-
-some_view.short_description = "Download selected as csv"
-
-
 class ProfileExport(View):
     def get(self, *args, **kwargs):
         dataset = CountryResource().export()
@@ -909,35 +886,35 @@ class ProfileImport(View):
                           self.request.POST or None,
                           self.request.FILES or None)
 
-        if self.request.POST and form.is_valid():
-            input_format = import_formats[
-                int(form.cleaned_data['input_format'])
-            ]()
-            import_file = form.cleaned_data['import_file']
-            # first always write the uploaded file to disk as it may be a
-            # memory file or else based on settings upload handlers
-            with tempfile.NamedTemporaryFile(delete=False) as uploaded_file:
-                for chunk in import_file.chunks():
-                    uploaded_file.write(chunk)
-
-            # then read the file, using the proper format-specific mode
-            with open(uploaded_file.name,
-                      input_format.get_read_mode()) as uploaded_import_file:
-                # warning, big files may exceed memory
-                data = uploaded_import_file.read()
-                if not input_format.is_binary() and self.from_encoding:
-                    data = force_text(data, self.from_encoding)
-                dataset = input_format.create_dataset(data)
-                result = resource.import_data(dataset, dry_run=True,
-                                              raise_errors=False)
-
-            context['result'] = result
-
-            if not result.has_errors():
-                context['confirm_form'] = ConfirmImportForm(initial={
-                    'import_file_name': os.path.basename(uploaded_file.name),
-                    'input_format': form.cleaned_data['input_format'],
-                })
+        # if self.request.POST and form.is_valid():
+        #     input_format = import_formats[
+        #         int(form.cleaned_data['input_format'])
+        #     ]()
+        #     import_file = form.cleaned_data['import_file']
+        #     # first always write the uploaded file to disk as it may be a
+        #     # memory file or else based on settings upload handlers
+        #     with tempfile.NamedTemporaryFile(delete=False) as uploaded_file:
+        #         for chunk in import_file.chunks():
+        #             uploaded_file.write(chunk)
+        #
+        #     # then read the file, using the proper format-specific mode
+        #     with open(uploaded_file.name,
+        #               input_format.get_read_mode()) as uploaded_import_file:
+        #         # warning, big files may exceed memory
+        #         data = uploaded_import_file.read()
+        #         if not input_format.is_binary() and self.from_encoding:
+        #             data = force_text(data, self.from_encoding)
+        #         dataset = input_format.create_dataset(data)
+        #         result = resource.import_data(dataset, dry_run=True,
+        #                                       raise_errors=False)
+        #
+        #     context['result'] = result
+        #
+        #     if not result.has_errors():
+        #         context['confirm_form'] = ConfirmImportForm(initial={
+        #             'import_file_name': os.path.basename(uploaded_file.name),
+        #             'input_format': form.cleaned_data['input_format'],
+        #         })
 
         context['form'] = form
         context['opts'] = self.model._meta
