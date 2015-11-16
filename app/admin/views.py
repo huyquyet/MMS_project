@@ -10,7 +10,6 @@ from django.contrib.auth.decorators import user_passes_test
 # Create your views here.
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.core.checks import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -990,6 +989,7 @@ class ProfileImport(View):
                 context['confirm_form'] = ConfirmImportForm(initial={
                     'import_file_name': os.path.basename(uploaded_file.name),
                     'input_format': form.cleaned_data['input_format'],
+                    'original_file_name': form.cleaned_data['import_file'],
                 })
 
         context['form'] = form
@@ -1084,8 +1084,14 @@ class ProfileProcessImport(View):
                 )
             '''
             success_message = 'Import finished'
-            messages.success(self.request, success_message)
+            # messages.success(self.request, success_message)
             import_file.close()
 
-            url = reverse('%s_list' % (str(opts.app_label).lower()))
+            # url = reverse('%s_list' % (str(opts.app_label).lower()))
+            url = reverse('admin:admin_user_index')
+            return HttpResponseRedirect(url)
+        else:
+            print(confirm_form.clean_import_file_name())
+            print(confirm_form)
+            url = reverse('admin:admin_team_index')
             return HttpResponseRedirect(url)
